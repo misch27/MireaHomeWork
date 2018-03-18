@@ -1,4 +1,5 @@
 
+
 public class Main {
     public static void main(String[] args) {
         try {
@@ -9,6 +10,8 @@ public class Main {
                 ThreadPars thPars = new ThreadPars(i,sel);
                 thPars.start();
             }
+            ThreadWriteToJSON thJSON = new ThreadWriteToJSON();
+            thJSON.start();
             sel.parsPage();
 
 

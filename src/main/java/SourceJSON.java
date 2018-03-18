@@ -1,10 +1,16 @@
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 public class SourceJSON {
+    @SerializedName("main")
     private ArrayList<String> mainStatistic = new ArrayList<>();
+    @SerializedName("ordersAndStory")
     private ArrayList<String> ordersAndStory = new ArrayList<>();
+    @SerializedName("chat")
     private ArrayList<String> chat = new ArrayList<>();
     private boolean isIntegrity;
+
     public ArrayList<String> getMainStatistic() {
         return mainStatistic;
     }
@@ -27,5 +33,14 @@ public class SourceJSON {
 
     public void setChat(ArrayList<String> chat) {
         this.chat = chat;
+    }
+
+    public boolean getIsIntegrity() {
+        if(!isIntegrity){
+            if(chat.size()!=0 & ordersAndStory.size()!=0 & mainStatistic.size()!=0){
+                isIntegrity = true;
+            }
+        }
+        return isIntegrity;
     }
 }

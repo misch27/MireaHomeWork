@@ -1,3 +1,4 @@
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -8,6 +9,7 @@ import java.util.List;
 
 class ThreadPars extends Thread {
     private static ArrayList<SourceJSON> arrJSON = new ArrayList();
+    private static int maxNum = 0;
     private int num = 0;
     private int numOfThread;
     private List<String> htmlCode;
@@ -17,7 +19,6 @@ class ThreadPars extends Thread {
         this.sel = sel;
         this.numOfThread = numOfThread;
     }
-
 
     private synchronized void setValToArrJSON(int index, ArrayList<String> vals) {
         if (arrJSON.size() - 1 < index) {
@@ -39,10 +40,15 @@ class ThreadPars extends Thread {
             }
         }
     }
+    public static ArrayList<SourceJSON> getArrJSON() {
+        return arrJSON;
+    }
+    public static int getMaxNum() {
+        return maxNum;
+    }
 
     @Override
     public void run() {
-        int maxNum = 0;
         try {
             maxNum = sel.synMaxRow();
         } catch (InterruptedException e) {
@@ -56,10 +62,6 @@ class ThreadPars extends Thread {
                 continue;
             }
             num++;
-        }
-        for (SourceJSON js:
-             arrJSON) {
-            System.out.println(js.getMainStatistic()+", "+js.getOrdersAndStory());
         }
     }
 
