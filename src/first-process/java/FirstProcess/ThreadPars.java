@@ -1,3 +1,4 @@
+package FirstProcess;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class ThreadPars extends Thread {
+    private ThreadWriteToJSON thJSON;
     private static ArrayList<SourceJSON> arrJSON = new ArrayList();
     private static int maxNum = 0;
     private int num = 0;
@@ -15,7 +17,8 @@ class ThreadPars extends Thread {
     private List<String> htmlCode;
     private HtmlCodeSelenium sel;
 
-    ThreadPars(int numOfThread, HtmlCodeSelenium sel) {
+    ThreadPars(int numOfThread, HtmlCodeSelenium sel, ThreadWriteToJSON thJSON) {
+        this.thJSON = thJSON;
         this.sel = sel;
         this.numOfThread = numOfThread;
     }
@@ -40,10 +43,10 @@ class ThreadPars extends Thread {
             }
         }
     }
-    public static ArrayList<SourceJSON> getArrJSON() {
+    static ArrayList<SourceJSON> getArrJSON() {
         return arrJSON;
     }
-    public static int getMaxNum() {
+    static int getMaxNum() {
         return maxNum;
     }
 
@@ -60,6 +63,11 @@ class ThreadPars extends Thread {
             } catch (NullPointerException | IndexOutOfBoundsException ex) {
                 htmlCode = sel.getHtmlCode();
                 continue;
+            }
+            try {
+                thJSON.synhronizationAllThreads();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             num++;
         }

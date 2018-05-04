@@ -1,3 +1,5 @@
+package FirstProcess;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -72,9 +74,10 @@ class HtmlCodeSelenium {
     }
 
     private void scrolling(WebDriver driver, int pix) {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("document.getElementById('market_base_list').style.top = '" +Integer.toString(pix)+"px';");
-
+        try {
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("document.getElementById('market_base_list').style.top = '" + Integer.toString(pix) + "px';");
+        } catch (org.openqa.selenium.WebDriverException exep){}
     }
 
     public synchronized ArrayList<String> getHtmlCode() {
