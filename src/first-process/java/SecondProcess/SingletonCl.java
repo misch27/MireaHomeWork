@@ -1,7 +1,5 @@
 package SecondProcess;
 
-import SecondProcess.ControllerArea.Controller;
-
 import java.util.ArrayList;
 
 public class SingletonCl {

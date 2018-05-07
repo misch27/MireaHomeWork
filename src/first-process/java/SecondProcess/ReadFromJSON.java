@@ -1,6 +1,7 @@
 package SecondProcess;
 
 import SecondProcess.ControllerArea.Controller;
+import SecondProcess.DAO.DAOThreadDemon;
 import com.google.gson.*;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -25,6 +26,7 @@ public class ReadFromJSON extends Thread {
         try {
             SingletonCl singletonCl = SingletonCl.getInstance();
             ArrayList<SourceJSON> readList = singletonCl.getSources();
+            int numberToStart = readList.size();
             String stingFile = "";
 
             try {
@@ -36,6 +38,7 @@ public class ReadFromJSON extends Thread {
 
             JsonParser parser = new JsonParser();
             JsonArray jsonValuta = (JsonArray) parser.parse(stingFile);
+
 
             for (int i = readList.size(); i < jsonValuta.size(); i++) {
                 SourceJSON sourceJSON = new SourceJSON();
@@ -54,7 +57,7 @@ public class ReadFromJSON extends Thread {
                 readList.add(sourceJSON);
             }
             singletonCl.setSources(readList);
-//            controller.synchBlock("ReadThread");
+            parsForDAO(readList);
             controller.insertValues(true);
 
         }catch (ClassCastException clc){
@@ -94,7 +97,7 @@ public class ReadFromJSON extends Thread {
     private final String fileLocation = System.getProperty("user.dir") + "\\arr.json";
     private String read() throws IOException {        //Create file object
         try {
-            try (RandomAccessFile rafile = new RandomAccessFile(fileLocation, "rw")) {
+            RandomAccessFile rafile = new RandomAccessFile(fileLocation, "rw");
                 FileChannel fileChannel = rafile.getChannel();
                 FileLock lock = fileChannel.lock();
                 MappedByteBuffer buffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, 0, rafile.length());
@@ -105,11 +108,17 @@ public class ReadFromJSON extends Thread {
                 buffer.force();
                 lock.release();
                 fileChannel.close();
+                rafile.close();
                 return decodeUTF8(b);
-            }
+
         }catch (IndexOutOfBoundsException exep){
             return read();
         }
+    }
+    private void parsForDAO(ArrayList<SourceJSON> listJSON){
+        DAOThreadDemon threadDemon = new DAOThreadDemon(SingletonCl.getInstance().getSources().size(), listJSON);
+        threadDemon.setDaemon(true);
+        threadDemon.start();
     }
 
 }

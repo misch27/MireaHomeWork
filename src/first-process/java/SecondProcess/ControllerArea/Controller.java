@@ -74,18 +74,24 @@ public class Controller {
     }
     public void insertValues(boolean good){
         if(good) {
-            ObservableList<String> listObserver = FXCollections.observableArrayList();
-            ArrayList<SourceJSON> listCollection = singletonCl.getSources();
-            for (SourceJSON sourceJSON : listCollection) {
-                listObserver.add(sourceJSON.mainStatistic.get(0));
+            try {
+                ObservableList<String> listObserver = FXCollections.observableArrayList();
+                ArrayList<SourceJSON> listCollection = singletonCl.getSources();
+                for (SourceJSON sourceJSON : listCollection) {
+                    listObserver.add(sourceJSON.mainStatistic.get(0));
+                }
+                if (list.isFocused()) {
+                    update.requestFocus();
+                }
+                initialize(listObserver);
+
+                list.setItems(listObserver);
+            }catch (IllegalStateException illeg){
+                System.out.println("Получен доступ из другого потока");
             }
-            if (list.isFocused()) {
-                update.requestFocus();
-            }
-            initialize(listObserver);
-            list.setItems(listObserver);
             setChatMesseges();
             System.out.println("Данные обновлены");
+
         }
         update.setDisable(false);
     }
