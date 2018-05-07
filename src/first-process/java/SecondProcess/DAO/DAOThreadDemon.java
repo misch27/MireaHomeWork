@@ -26,8 +26,8 @@ public class DAOThreadDemon extends Thread {
                 dao.batchSQL(i, listJSON.get(i).getOrdersAndStory().get(1));
                 dao.setTabName("story");
                 dao.batchSQL(i, listJSON.get(i).getOrdersAndStory().get(2));
-                dao.setTabName("Chat");
-                dao.batchSQL(i, listJSON.get(i).getChat());
+//                dao.setTabName("Chat");
+//                dao.batchSQL(i, listJSON.get(i).getChat());
             }catch (SQLException sql){
                 sql.printStackTrace();
             }

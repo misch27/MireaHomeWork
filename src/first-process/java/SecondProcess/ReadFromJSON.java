@@ -57,7 +57,7 @@ public class ReadFromJSON extends Thread {
                 readList.add(sourceJSON);
             }
             singletonCl.setSources(readList);
-            parsForDAO(readList);
+            parsForDAO(numberToStart, readList);
             controller.insertValues(true);
 
         }catch (ClassCastException clc){
@@ -115,8 +115,8 @@ public class ReadFromJSON extends Thread {
             return read();
         }
     }
-    private void parsForDAO(ArrayList<SourceJSON> listJSON){
-        DAOThreadDemon threadDemon = new DAOThreadDemon(SingletonCl.getInstance().getSources().size(), listJSON);
+    private void parsForDAO(int numberToStart, ArrayList<SourceJSON> listJSON){
+        DAOThreadDemon threadDemon = new DAOThreadDemon(numberToStart, listJSON);
         threadDemon.setDaemon(true);
         threadDemon.start();
     }
