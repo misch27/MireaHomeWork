@@ -10,38 +10,23 @@ public class ThreadWriteToJSON extends Thread {
 
     @Override
     public void run() {
-        while (ThreadPars.getMaxNum()==0){
-            try {
+        try {
+            while (ThreadPars.getMaxNum() == 0) {
                 Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
-        }
-        int currentNum = 0;
-        int maxVal = ThreadPars.getMaxNum();
-        ArrayList<SourceJSON> sourceArr = ThreadPars.getArrJSON();
-
-        while (currentNum< maxVal){
-            try {
-            synhronizationAllThreads();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(sourceArr.size()<currentNum){
-                sourceArr = ThreadPars.getArrJSON();
-                continue;
-            }
-            try {
+            int currentNum = 0;
+            int maxVal = ThreadPars.getMaxNum();
+            ArrayList<SourceJSON> sourceArr = ThreadPars.getArrJSON();
+            for(currentNum = 0; currentNum<maxVal; currentNum++){
+                synhronizationAllThreads();
                 SourceJSON curSource = sourceArr.get(currentNum);
-                    Thread.sleep(500);
-                    writeToFile(curSource, currentNum);
-            }catch (IndexOutOfBoundsException | InterruptedException ex){
-                System.out.println("Этот костыль точно работает?");
-                continue;
+                Thread.sleep(500);
+                writeToFile(curSource, currentNum);
             }
-            currentNum++;
+            System.exit(0);
+        }catch (InterruptedException interrupt){
+            System.out.println("Поток " + this.getName() + " завершился с ошибкой");
         }
-        System.exit(0);
     }
 
     private void writeToFile(SourceJSON sourceJSON, int currentNum){

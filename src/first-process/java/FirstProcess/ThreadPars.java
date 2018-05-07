@@ -51,25 +51,24 @@ class ThreadPars extends Thread {
     }
 
     @Override
-    public void run() {
+    public void run(){
         try {
+
             maxNum = sel.synMaxRow();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        while (num < maxNum) {
-            try {
-                setValToArrJSON(num, parsPage(htmlCode.get(num)));
-            } catch (NullPointerException | IndexOutOfBoundsException ex) {
-                htmlCode = sel.getHtmlCode();
-                continue;
-            }
-            try {
+
+            while (num < maxNum) {
+                try {
+                    setValToArrJSON(num, parsPage(htmlCode.get(num)));
+                } catch (NullPointerException | IndexOutOfBoundsException ex) {
+                    htmlCode = sel.getHtmlCode();
+                    continue;
+                }
+
                 thJSON.synhronizationAllThreads();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                num++;
             }
-            num++;
+        }catch (InterruptedException interrupd){
+            System.out.println("Поток " + this.getName() + " завершился с ошибкой");
         }
     }
 

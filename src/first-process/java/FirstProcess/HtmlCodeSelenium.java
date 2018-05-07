@@ -77,7 +77,9 @@ class HtmlCodeSelenium {
         try {
             JavascriptExecutor js = (JavascriptExecutor) driver;
             js.executeScript("document.getElementById('market_base_list').style.top = '" + Integer.toString(pix) + "px';");
-        } catch (org.openqa.selenium.WebDriverException exep){}
+        } catch (org.openqa.selenium.WebDriverException exep){
+            System.out.println("Обработка промотки таблицы с валютами");
+        }
     }
 
     public synchronized ArrayList<String> getHtmlCode() {
